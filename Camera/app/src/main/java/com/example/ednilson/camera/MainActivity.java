@@ -5,18 +5,33 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Switch;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button btnToast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        btnToast = (Button)  findViewById(R.id.btn_toast);
+
+        btnToast.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Toast Clicked", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
-    public  boolean onCreateOptionMenu(Menu menu){
+    public  boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
         return super.onCreateOptionsMenu(menu);
@@ -34,6 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    // Hello Ednilson
+
 
 }
