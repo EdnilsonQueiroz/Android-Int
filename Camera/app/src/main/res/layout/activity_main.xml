@@ -1,27 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.ednilson.camera.MainActivity"
-    tools:layout_editor_absoluteY="81dp"
-    tools:layout_editor_absoluteX="0dp">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizantal"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    tools:context="com.example.ednilson.camera.MainActivity">
 
-    <RelativeLayout
-        android:layout_width="368dp"
-        android:layout_height="495dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
-
-        <Button
-            android:id="@+id/btn_toast"
+    <LinearLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        
+        <LinearLayout
+            android:id="@+id/action_Buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_toast"
-            tools:layout_editor_absoluteX="140dp"
-            tools:layout_editor_absoluteY="170dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            
+            <Button
+                android:id="@+id/btn_capture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_capture"
+                android:layout_marginTop="100dp"/>
+            
+            
+        </LinearLayout>
+        
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
