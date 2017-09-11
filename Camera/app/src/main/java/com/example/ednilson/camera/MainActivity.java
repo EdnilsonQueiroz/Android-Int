@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnCapture;
     private Context context;
     private LinearLayout camera_preview;
+    private CameraPreview preview;
 
 
     @Override
@@ -93,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
+
+                preview.refreshCamera(camera);
 
             }
         };
