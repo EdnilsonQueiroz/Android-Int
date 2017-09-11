@@ -1,5 +1,7 @@
 package com.example.ednilson.camera;
 
+import android.content.Context;
+import android.graphics.Camera;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -10,13 +12,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static android.graphics.Camera.*;
+
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnToast;
+    private android.hardware.Camera camera;
+    private android.hardware.Camera.PictureCallback mPicture;
+    private Button btnCapture;
+    private Context context;
+    private LinearLayout camera_preview;
 
 
     @Override
@@ -24,28 +42,83 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnToast = (Button)  findViewById(R.id.btn_toast);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        context = this;
+        init();
+    }
+    public void init(){
+        camera = android.hardware.Camera.open(openBackCamera());
+        mPicture = getPictureCallback();
+    }
 
-        btnToast.setOnClickListener(new View.OnClickListener(){
+    private int openBackCamera(){
+        int numberOfCameras = android.hardware.Camera.getNumberOfCameras();
+         int cameraId = -1;
 
-            @Override
-            public void onClick(View view) {
-                LayoutInflater inflater = getLayoutInflater();
+        for (int i = 0; i< numberOfCameras;i++){
+            android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
 
-                View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.custom_toast));
+            android.hardware.Camera.getCameraInfo(i, info);
 
-                TextView textToast = (TextView) layout.findViewById(R.id.text_toast);
-
-                textToast.setText("button clicked with custom template");
-
-                Toast toast = new Toast(getApplicationContext());
-                toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
-                toast.show();
-                Toast.makeText(getApplicationContext(), "Toast Clicked", Toast.LENGTH_LONG).show();
+            if (info.facing == android.hardware.Camera.CameraInfo.CAMERA_FACING_BACK){
+                cameraId = i;
             }
-        });
+
+        }
+        return cameraId;
+    }
+
+    private android.hardware.Camera.PictureCallback getPictureCallback () {
+        android.hardware.Camera.PictureCallback picture = new android.hardware.Camera.PictureCallback() {
+            @Override
+            public void onPictureTaken(byte[] data, android.hardware.Camera camera) {
+                File pictureFile = getOutMediaFile();
+
+                if (pictureFile == null) {
+                    return;
+                }
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+
+                    fos.write(data);
+                    fos.close();
+
+                    Toast toast = Toast.makeText(context, "Picture Saved", Toast.LENGTH_LONG);
+                    toast.show();
+
+                } catch (FileNotFoundException ex) {
+
+                } catch (IOException ex1) {
+
+
+                }
+
+            }
+        };
+
+
+        return picture;
+
+    }
+
+
+
+
+
+    private File getOutMediaFile(){
+        File mediaStorageDir = new File("/sdcard/","Camera");
+
+        if (!mediaStorageDir.exists()){
+            if (!mediaStorageDir.mkdirs()){
+                return  null;
+            }
+        }
+        String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        File mediFile = new File ((mediaStorageDir.getPath() + File.separator + "img" + time + ".jpg"));
+
+        return mediFile;
     }
 
     @Override
